@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EduManage - University Management System</title>
+  <link rel="stylesheet" href="styles.css">
+  <title>Nazaqat Ali</title>
+</head>
+<body>
+  <div class="app">
+    <aside class="sidebar" id="sidebar">
+      <div class="brand"><span class="logo">🎓</span><span>University Management</span></div>
+      <nav>
+        <button class="nav-item active" data-section="dashboard">📊 <span>Dashboard</span></button>
+        <button class="nav-item" data-section="students">👨‍🎓 <span>Students</span></button>
+        <button class="nav-item" data-section="teachers">👩‍🏫 <span>Teachers</span></button>
+        <button class="nav-item" data-section="classes">🏫 <span>Classes</span></button>
+        <button class="nav-item" data-section="attendance">📝 <span>Attendance</span></button>
+        <button class="nav-item" data-section="fees">💳 <span>Fees</span></button>
+        <button class="nav-item" data-section="results">📚 <span>Results</span></button>
+        <button class="nav-item" data-section="notices">📢 <span>Notices</span></button>
+        <button class="nav-item" data-section="settings">⚙️ <span>Settings</span></button>
+      </nav>
+      <div class="sidebar-footer">University Management<br><small>Frontend Demo • HTML/CSS/JS</small></div>
+    </aside>
+
+    <main class="main">
+      <header class="topbar">
+        <button class="menu-btn" id="menuBtn">☰</button>
+        <div>
+          <h1 id="pageTitle">Dashboard</h1>
+          <p id="today"></p>
+        </div>
+        <div class="top-actions">
+          <button class="icon-btn" title="Notifications" onclick="showToast('You have 3 new notifications')">🔔<b class="badge-dot">3</b></button>
+          <div class="profile">
+            <div class="avatar">NA</div>
+            <div><strong>Admin</strong><small>Administrator</small></div>
+          </div>
+        </div>
+      </header>
+
+      <div class="content">
+        <!-- Dashboard -->
+        <section id="dashboard" class="section active">
+          <div class="welcome">
+            <div><h2>Welcome back, Admin Nazaqat Ali 👋</h2><p>Manage your University from one place.</p></div>
+            <button class="primary" onclick="openModal('studentModal')">＋ Add Student</button>
+          </div>
+          <div class="stats">
+            <div class="stat-card"><div class="stat-icon blue">👨‍🎓</div><div><span>Total Students</span><strong id="studentCount">0</strong><small>Active students</small></div></div>
+            <div class="stat-card"><div class="stat-icon purple">👩‍🏫</div><div><span>Total Teachers</span><strong id="teacherCount">0</strong><small>Teaching staff</small></div></div>
+            <div class="stat-card"><div class="stat-icon green">💰</div><div><span>Fees Collected</span><strong id="feeTotal">Rs. 0</strong><small>This term</small></div></div>
+            <div class="stat-card"><div class="stat-icon orange">📅</div><div><span>Attendance</span><strong id="attendanceRate">0%</strong><small>Overall today</small></div></div>
+          </div>
+          <div class="grid-2">
+            <div class="card">
+              <div class="card-head"><h3>Recent Students</h3><button class="link-btn" onclick="showSection('students')">View all</button></div>
+              <div class="table-wrap"><table><thead><tr><th>Name</th><th>Class</th><th>Status</th></tr></thead><tbody id="recentStudents"></tbody></table></div>
+            </div>
+            <div class="card">
+              <div class="card-head"><h3>Upcoming Events</h3><button class="link-btn" onclick="showToast('Calendar module ready for integration')">Calendar</button></div>
+              <div class="events">
+                <div class="event"><span>📅</span><div><strong>Parent-Teacher Meeting</strong><small>18 Sep 2026 • 10:00 AM</small></div></div>
+                <div class="event"><span>🏆</span><div><strong>Annual Sports Day</strong><small>25 Sep 2026 • School Ground</small></div></div>
+                <div class="event"><span>📝</span><div><strong>Mid-Term Examination</strong><small>01 Oct 2026 • All Classes</small></div></div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Students -->
+        <section id="students" class="section">
+          <div class="section-head"><div><h2>Student Management</h2><p>Add, search, edit and remove student records.</p></div><button class="primary" onclick="openModal('studentModal')">＋ Add Student</button></div>
+          <div class="toolbar"><input id="studentSearch" class="search" placeholder="🔍 Search by name, ID or class..." oninput="renderStudents()"><select id="studentClassFilter" onchange="renderStudents()"><option value="">All Classes</option><option>Grade 6</option><option>Grade 7</option><option>Grade 8</option><option>Grade 9</option><option>Grade 10</option></select></div>
+          <div class="card table-card"><div class="table-wrap"><table><thead><tr><th>ID</th><th>Student</th><th>Gender</th><th>Class</th><th>Phone</th><th>Status</th><th>Actions</th></tr></thead><tbody id="studentsTable"></tbody></table></div></div>
+        </section>
+
+        <!-- Teachers -->
+        <section id="teachers" class="section">
+          <div class="section-head"><div><h2>Teacher Management</h2><p>Manage teaching staff and subjects.</p></div><button class="primary" onclick="openModal('teacherModal')">＋ Add Teacher</button></div>
+          <div class="toolbar"><input id="teacherSearch" class="search" placeholder="🔍 Search teacher or subject..." oninput="renderTeachers()"></div>
+          <div class="card table-card"><div class="table-wrap"><table><thead><tr><th>ID</th><th>Teacher</th><th>Subject</th><th>Class</th><th>Phone</th><th>Actions</th></tr></thead><tbody id="teachersTable"></tbody></table></div></div>
+        </section>
+
+        <!-- Classes -->
+        <section id="classes" class="section">
+          <div class="section-head"><div><h2>Classes & Subjects</h2><p>Overview of classes, subjects and assigned teachers.</p></div><button class="primary" onclick="showToast('Use the Students and Teachers modules to assign records.')">＋ Add Class</button></div>
+          <div class="class-grid" id="classGrid"></div>
+        </section>
+
+        <!-- Attendance -->
+        <section id="attendance" class="section">
+          <div class="section-head"><div><h2>Attendance</h2><p>Mark and review daily student attendance.</p></div><button class="primary" onclick="saveAttendance()">💾 Save Attendance</button></div>
+          <div class="toolbar"><input type="date" id="attendanceDate"><select id="attendanceClass" onchange="renderAttendance()"><option>Grade 6</option><option>Grade 7</option><option>Grade 8</option><option>Grade 9</option><option>Grade 10</option></select><button class="secondary" onclick="markAll(true)">Mark All Present</button><button class="secondary" onclick="markAll(false)">Mark All Absent</button></div>
+          <div class="card table-card"><div class="table-wrap"><table><thead><tr><th>ID</th><th>Student</th><th>Status</th></tr></thead><tbody id="attendanceTable"></tbody></table></div></div>
+        </section>
+
+        <!-- Fees -->
+        <section id="fees" class="section">
+          <div class="section-head"><div><h2>Fee Management</h2><p>Track paid and pending school fees.</p></div><button class="primary" onclick="openModal('feeModal')">＋ Record Payment</button></div>
+          <div class="mini-stats"><div class="mini">Collected <strong id="feesCollected">Rs. 0</strong></div><div class="mini">Pending <strong id="feesPending">Rs. 0</strong></div><div class="mini">Payments <strong id="paymentCount">0</strong></div></div>
+          <div class="card table-card"><div class="table-wrap"><table><thead><tr><th>Receipt</th><th>Student</th><th>Month</th><th>Amount</th><th>Status</th><th>Actions</th></tr></thead><tbody id="feesTable"></tbody></table></div></div>
+        </section>
+
+        <!-- Results -->
+        <section id="results" class="section">
+          <div class="section-head"><div><h2>Examination Results</h2><p>Enter and view marks and grades.</p></div><button class="primary" onclick="openModal('resultModal')">＋ Add Result</button></div>
+          <div class="toolbar"><input id="resultSearch" class="search" placeholder="🔍 Search student..." oninput="renderResults()"></div>
+          <div class="card table-card"><div class="table-wrap"><table><thead><tr><th>Student</th><th>Subject</th><th>Marks</th><th>Total</th><th>Grade</th><th>Actions</th></tr></thead><tbody id="resultsTable"></tbody></table></div></div>
+        </section>
+
+        <!-- Notices -->
+        <section id="notices" class="section">
+          <div class="section-head"><div><h2>Notices & Announcements</h2><p>Publish important school information.</p></div><button class="primary" onclick="openModal('noticeModal')">＋ New Notice</button></div>
+          <div class="notice-list" id="noticeList"></div>
+        </section>
+
+        <!-- Settings -->
+        <section id="settings" class="section">
+          <div class="section-head"><div><h2>Settings</h2><p>Configure school information and demo data.</p></div></div>
+          <div class="card settings-card">
+            <label>University Name<input id="schoolName" value="MBBS Campus Dadu"></label>
+            <label>Academic Year<input value="2026 - 2027"></label>
+            <label>Admin Email<input type="email" value="alinazaqat575@gmail.com"></label>
+            <div class="settings-actions"><button class="primary" onclick="saveSettings()">Save Settings</button><button class="danger-outline" onclick="resetData()">Reset Demo Data</button></div>
+          </div>
+        </section>
+      </div>
+    </main>
+  </div>
+
+  <!-- Student Modal -->
+  <div class="modal" id="studentModal"><div class="modal-box"><button class="close" onclick="closeModal('studentModal')">×</button><h2>Add Student</h2><form id="studentForm" onsubmit="addStudent(event)"><div class="form-grid"><label>Student ID<input id="sId" required placeholder="STU-006"></label><label>Full Name<input id="sName" required></label><label>Gender<select id="sGender"><option>Male</option><option>Female</option></select></label><label>Class<select id="sClass"><option>Grade 6</option><option>Grade 7</option><option>Grade 8</option><option>Grade 9</option><option>Grade 10</option></select></label><label>Phone<input id="sPhone" placeholder="03XX-XXXXXXX"></label><label>Email<input type="email" id="sEmail"></label></div><button class="primary full" type="submit">Save Student</button></form></div></div>
+
+  <!-- Teacher Modal -->
+  <div class="modal" id="teacherModal"><div class="modal-box"><button class="close" onclick="closeModal('teacherModal')">×</button><h2>Add Teacher</h2><form onsubmit="addTeacher(event)"><div class="form-grid"><label>Teacher ID<input id="tId" required placeholder="TCH-006"></label><label>Full Name<input id="tName" required></label><label>Subject<input id="tSubject" required placeholder="Mathematics"></label><label>Class<select id="tClass"><option>Grade 6</option><option>Grade 7</option><option>Grade 8</option><option>Grade 9</option><option>Grade 10</option></select></label><label>Phone<input id="tPhone"></label><label>Email<input type="email" id="tEmail"></label></div><button class="primary full" type="submit">Save Teacher</button></form></div></div>
+
+  <!-- Fee Modal -->
+  <div class="modal" id="feeModal"><div class="modal-box"><button class="close" onclick="closeModal('feeModal')">×</button><h2>Record Fee Payment</h2><form onsubmit="addFee(event)"><div class="form-grid"><label>Student<select id="fStudent"></select></label><label>Month<input id="fMonth" type="month" required></label><label>Amount (Rs.)<input id="fAmount" type="number" min="0" required></label><label>Status<select id="fStatus"><option>Paid</option><option>Pending</option></select></label></div><button class="primary full" type="submit">Save Payment</button></form></div></div>
+
+  <!-- Result Modal -->
+  <div class="modal" id="resultModal"><div class="modal-box"><button class="close" onclick="closeModal('resultModal')">×</button><h2>Add Examination Result</h2><form onsubmit="addResult(event)"><div class="form-grid"><label>Student<select id="rStudent"></select></label><label>Subject<input id="rSubject" required placeholder="Mathematics"></label><label>Marks<input id="rMarks" type="number" min="0" max="100" required></label><label>Total Marks<input id="rTotal" type="number" min="1" value="100" required></label></div><button class="primary full" type="submit">Save Result</button></form></div></div>
+
+  <!-- Notice Modal -->
+  <div class="modal" id="noticeModal"><div class="modal-box"><button class="close" onclick="closeModal('noticeModal')">×</button><h2>New Notice</h2><form onsubmit="addNotice(event)"><label>Title<input id="nTitle" required></label><label>Message<textarea id="nMessage" rows="5" required></textarea></label><button class="primary full" type="submit">Publish Notice</button></form></div></div>
+
+  <div class="toast" id="toast"></div>
+  <script src="script.js"></script>
+</body>
+</html>
